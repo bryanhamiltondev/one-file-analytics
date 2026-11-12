@@ -4,6 +4,7 @@
 
 - `src/stats.php`: production-verbatim extract (hosts -> example.com), incl. the bhglow1 glow-up block
 - README: Status flipped to shipped; scars now point at the actual code (`$readTail`)
+- README corrected: removed beacon-era claims (bot tell, IP hashing) - the Cockpit is log-only, and the README now says exactly what ships
 
 ## 0.1.0 - 2026-11-12
 
