@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>one-file-analytics - the cockpit (demo)</title>
+<style>
+  :root{--bg:#0b0f14;--panel:#11161d;--edge:#1d2630;--ink:#c9d6e2;--dim:#8fa3b8;--cyan:#22d3ee;--cyan-deep:#0e7490;--amber:#f5a524;--led:#3fb950;--red:#f85149;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:ui-monospace,'Cascadia Mono','JetBrains Mono',Menlo,Consolas,monospace;padding:48px 20px;line-height:1.5}
+  .wrap{max-width:880px;margin:0 auto}
+  header{border-bottom:1px solid var(--edge);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:22px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase}
+  h1 .lamp{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--led);box-shadow:0 0 8px var(--led);margin-right:10px}
+  .sub{color:var(--dim);font-size:13px;margin-top:6px}
+  .demo-tag{display:inline-block;margin-top:10px;font-size:11px;color:var(--amber);border:1px solid var(--amber);padding:2px 8px;letter-spacing:1px}
+  h2{font-size:12px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin:30px 0 12px;border-bottom:1px solid var(--edge);padding-bottom:6px}
+  .verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .verdict{background:var(--panel);border:1px solid var(--edge);padding:16px}
+  .verdict .n{font-size:26px;color:var(--cyan);text-shadow:0 0 12px var(--cyan-deep)}
+  .verdict.bad .n{color:var(--amber);text-shadow:0 0 12px #7a5200}
+  .verdict .l{font-size:11px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+  .bar{margin:10px 0;font-size:13px}
+  .bar .who{display:flex;justify-content:space-between;color:var(--ink);margin-bottom:3px}
+  .bar .who .pct{color:var(--dim)}
+  .bar .track{background:var(--panel);border:1px solid var(--edge);height:14px}
+  .bar .fill{height:100%;background:linear-gradient(90deg,var(--cyan-deep),var(--cyan))}
+  .bar.bot .fill{background:linear-gradient(90deg,#5a3a00,var(--amber))}
+  .bar.bot .who .name{color:var(--dim)}
+  .note{background:var(--panel);border:1px solid var(--edge);border-left:3px solid var(--cyan);padding:12px 14px;font-size:12px;color:var(--dim);margin-top:14px}
+  .note b{color:var(--ink)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--edge)}
+  th{color:var(--dim);font-weight:400;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+  td.num{text-align:right;color:var(--cyan)}
+  footer{margin-top:36px;border-top:1px solid var(--edge);padding-top:14px;font-size:12px;color:var(--dim)}
+  footer .ok{color:var(--led)}
+  a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="lamp"></span>The Cockpit</h1>
+    <div class="sub">one php file &middot; raw access logs &middot; no javascript &middot; no database &middot; no cookies</div>
+    <span class="demo-tag">SYNTHETIC DEMO DATA</span>
+  </header>
+
+  <h2>Verdicts</h2>
+  <div class="verdicts">
+    <div class="verdict"><div class="n">39,513</div><div class="l">lines parsed</div></div>
+    <div class="verdict"><div class="n">214</div><div class="l">hits today</div></div>
+    <div class="verdict"><div class="n">61</div><div class="l">humans</div></div>
+    <div class="verdict bad"><div class="n">153</div><div class="l">bots filtered</div></div>
+  </div>
+
+  <h2>Referrers</h2>
+  <div class="bar"><div class="who"><span class="name">direct / none</span><span class="pct">41%</span></div><div class="track"><div class="fill" style="width:41%"></div></div></div>
+  <div class="bar"><div class="who"><span class="name">google</span><span class="pct">27%</span></div><div class="track"><div class="fill" style="width:27%"></div></div></div>
+  <div class="bar"><div class="who"><span class="name">dev.to</span><span class="pct">11%</span></div><div class="track"><div class="fill" style="width:11%"></div></div></div>
+  <div class="bar"><div class="who"><span class="name">coderlegion.com</span><span class="pct">8%</span></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
+  <div class="bar"><div class="who"><span class="name">reddit.com</span><span class="pct">6%</span></div><div class="track"><div class="fill" style="width:6%"></div></div></div>
+  <div class="bar"><div class="who"><span class="name">bing</span><span class="pct">3%</span></div><div class="track"><div class="fill" style="width:3%"></div></div></div>
+
+  <div class="note"><b>the in-app browser problem:</b> "direct / none" isn't loyalty - it's chat-app webviews stripping the referrer header. the logs undercount and the dashboard says so instead of inventing a source.</div>
+
+  <h2>Bots caught by behavior</h2>
+  <div class="bar bot"><div class="who"><span class="name">/wp-admin/install.php</span><span class="pct">1,891 &middot; never loaded css</span></div><div class="track"><div class="fill" style="width:64%"></div></div></div>
+  <div class="bar bot"><div class="who"><span class="name">/.env</span><span class="pct">742 &middot; single-url scanners</span></div><div class="track"><div class="fill" style="width:31%"></div></div></div>
+  <div class="bar bot"><div class="who"><span class="name">prefetchers</span><span class="pct">388 &middot; look human, read nothing</span></div><div class="track"><div class="fill" style="width:18%"></div></div></div>
+
+  <h2>Top entry pages</h2>
+  <table>
+    <tr><th>path</th><th style="text-align:right">entries</th></tr>
+    <tr><td>/</td><td class="num">312</td></tr>
+    <tr><td>/writing/</td><td class="num">148</td></tr>
+    <tr><td>/projects/</td><td class="num">97</td></tr>
+    <tr><td>/writing/press-cmdk/</td><td class="num">64</td></tr>
+  </table>
+
+  <footer>
+    <span class="ok">&#9679;</span> snapshot cached 4 min ago &middot; parsed 14 log files &middot; 39,513 lines &middot; today flagged: <span style="color:var(--amber)">partial - the day is not over</span><br>
+    generated by one stats.php &middot; <a href="https://github.com/bryanhamiltondev/one-file-analytics">source</a> &middot; real dashboard reads raw logs; this page is static synthetic data
+  </footer>
+</div>
+</body>
+</html>
