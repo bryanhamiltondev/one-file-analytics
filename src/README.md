@@ -1,8 +1,12 @@
-# src/ - paste workflow
+# src/
 
-The production `stats.php` + `px.php` beacon run live and get extracted here
-**production-verbatim** (tokens stripped, hosts -> example.com), same as every
-other repo in this org. No re-imagined reference implementations: the library
-lands as it runs in prod, then tests are audited against *actual* behavior.
+`stats.php` - the production extract (bhstats1, Nov 11 2026). Sanitization
+scope: hosts -> `example.com`, log-filter needle `bryanhamilton` ->
+`example.com`. Everything else verbatim as it runs, including the bhglow1
+inline style/script block (self-contained, guarded by `window.__BHGLOW1`).
 
-Demo meanwhile: [docs/index.html](../docs/index.html).
+Deploy: drop in your docroot, visit `/stats.php`. Logs expected at
+`$home/logs/*` or `$home/access-logs/*` (cPanel Raw Access). Cache file:
+`.stats-cache.json` (10-minute TTL) written next to the script.
+
+Demo: [docs/index.html](../docs/index.html).

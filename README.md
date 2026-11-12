@@ -20,13 +20,14 @@ no javascript   no database   no cookies   no consent banner
 
 ## The scars (why the guards exist)
 
-- `filesize()` on a gzip stream returns the *compressed* size - my parser silently stopped reading the newest lines and every chart still looked healthy. Fixed by parsing the stream, not trusting the wrapper.
+- `filesize()` on a gzip stream returns the *compressed* size - my parser silently stopped reading the newest lines and every chart still looked healthy. Fixed by parsing the stream, not trusting the wrapper (`$readTail` streams the tail, gzip or not).
 - An orphaned `fclose()` on first render 500'd the whole dashboard. Fixed by making every failure a *verdict* instead of an exception.
-- A snapshot cache serves the parsed report for 10 minutes. The footer tells you the cache age and how many log files were parsed, because a number without provenance is just a vibe.
+- A snapshot cache (`.stats-cache.json`, 10-minute TTL) serves the parsed report. The footer tells you the snapshot age and how many log files were parsed, because a number without provenance is just a vibe.
+- An 8 MB parse budget reads the newest logs first and stops when it's spent - the gauge stays live even when the log dir is huge.
 
 ## Status
 
-`docs/` runs a self-contained demo with synthetic data (no fetches, safe for GitHub Pages). The production-verbatim `src/stats.php` extraction lands via the paste workflow - see `src/README.md`.
+`src/stats.php` is the production extract (hosts sanitized to `example.com`, everything else verbatim as it runs). `docs/` runs a self-contained demo with synthetic data. Drop `stats.php` in your docroot, enable Raw Access logs in cPanel, done.
 
 ## License
 
